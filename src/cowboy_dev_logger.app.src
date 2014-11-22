@@ -1,0 +1,11 @@
+{application, cowboy_dev_logger, [
+  {description, "simple request logging"},
+  {vsn, "0.1.0"},
+  {modules, []},
+  {registered, []},
+  {applications, [
+    kernel,
+    stdlib
+  ]},
+  {env, []}
+]}.
