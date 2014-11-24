@@ -25,7 +25,7 @@ print_time(Req, Env, Next) ->
     _ -> <<Path/binary, "?", Qs/binary>>
   end,
 
-  io:format("\x1b[90m~s ~s \x1b[" ++ StatusCode ++ "\x1b[90m" ++ ResSize ++ "~s\x1b[0m~n", [Method, Url, format_time(Time/1000)]),
+  io:format("\x1b[90m~s ~s \x1b[" ++ StatusCode ++ "\x1b[90m" ++ ResSize ++ "~s\x1b[0m~n", [Method, Url, format_time(Time)]),
   Res.
 
 format_status_code({ok, Req3, _}) ->
@@ -83,9 +83,9 @@ set_meta(Status, Body, Req) ->
   Req2 = cowboy_req:set_meta(status_code, Status, Req),
   cowboy_req:set_meta(response_length, iolist_size(Body), Req2).
 
-format_time(Time) when Time < 1 ->
-  "\e[34m1ms";
 format_time(Time) when Time < 1000 ->
-  "\e[34m" ++ integer_to_list(trunc(Time)) ++ "ms";
+  "\e[34m" ++ integer_to_list(trunc(Time)) ++ "us";
+format_time(Time) when Time < 1000000 ->
+  "\e[34m" ++ integer_to_list(trunc(Time/1000)) ++ "ms";
 format_time(Time) ->
-  "\e[35m" ++ integer_to_list(trunc(Time/1000)) ++ "s".
+  "\e[35m" ++ integer_to_list(trunc(Time/1000000)) ++ "s".
